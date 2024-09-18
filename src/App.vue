@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <start-page></start-page>
-    <persons-page></persons-page>
   </div>
 </template>
 
