@@ -9,7 +9,7 @@ const usePersonsStore = defineStore("persons", {
     actions: {
         addPerson(newPerson) {
 			this.persons.push(newPerson);
-		},
+		}, // добавляем в массив persons новое имя
     }
 });
 

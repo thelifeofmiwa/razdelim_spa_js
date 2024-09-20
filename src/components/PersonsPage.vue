@@ -7,17 +7,25 @@
 				{{ person }}
 			</div>
 		</div>
-		<v-btn variant="outlined" v-if="this.dialogVisible === false" @click="this.dialogVisible = true">+</v-btn>
-		<div class="new__person" v-if="this.dialogVisible === true">
-            <v-form @submit.prevent>
-			<v-text-field v-model="newPerson" label="Введите имя">
-			</v-text-field>
-		</v-form>
-		<v-btn @click="addPersonsAndClearInput(this.newPerson)"
-			>Добавить</v-btn
+		<v-btn
+			variant="outlined"
+			v-if="this.dialogVisible === false"
+			@click="this.dialogVisible = true"
+			>+</v-btn
 		>
-        </div>
-		
+		<!-- При клине на кнопку '+' генерируем форму для добавления новых людей  -->
+		<div class="new__person" v-if="this.dialogVisible === true">
+			<v-form @submit.prevent>
+				<v-text-field
+					v-model="newPerson"
+					label="Введите имя"
+				>
+				</v-text-field>
+			</v-form>
+			<v-btn @click="addPersonsAndClearInput(this.newPerson)"
+				>Добавить</v-btn
+			>
+		</div>
 	</div>
 </template>
 
@@ -30,7 +38,7 @@ export default {
 		const persons = usePersonsStore();
 		persons.addPerson();
 		return persons;
-	},
+	}, // инициализация массива persons из хранилища
 	data() {
 		return {
 			dialogVisible: false,
@@ -40,9 +48,9 @@ export default {
 	methods: {
 		addPersonsAndClearInput() {
 			this.addPerson(this.newPerson);
-            this.dialogVisible = false;
+			this.dialogVisible = false;
 			this.newPerson = "";
-		},
+		}, // Используем метод хранилища для добавления нового человека в массив имён, после скрываем диалоговое окно и очищаем переменную newPerson
 	},
 };
 </script>
