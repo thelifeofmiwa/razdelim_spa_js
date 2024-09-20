@@ -13,7 +13,7 @@
 			@click="this.dialogVisible = true"
 			>+</v-btn
 		>
-		<!-- При клине на кнопку '+' генерируем форму для добавления новых людей  -->
+		<!-- При клике на кнопку '+' генерируем форму для добавления новых людей  -->
 		<div class="new__person" v-if="this.dialogVisible === true">
 			<v-form @submit.prevent>
 				<v-text-field
@@ -26,6 +26,7 @@
 				>Добавить</v-btn
 			>
 		</div>
+		<v-btn class="next__page">На следующий этап</v-btn>
 	</div>
 </template>
 
@@ -58,5 +59,8 @@ export default {
 <style scoped>
 .new__person {
 	margin-top: 30px;
+}
+.next__page{
+	margin-bottom: auto;	
 }
 </style>
