@@ -10,7 +10,7 @@
 		<v-btn variant="outlined" v-if="this.dialogVisible === false" @click="this.dialogVisible = true">+</v-btn>
 		<div class="new__person" v-if="this.dialogVisible === true">
             <v-form @submit.prevent>
-			<v-text-field v-model="newPerson" label="Введите имя" v-focus>
+			<v-text-field v-model="newPerson" label="Введите имя">
 			</v-text-field>
 		</v-form>
 		<v-btn @click="addPersonsAndClearInput(this.newPerson)"
