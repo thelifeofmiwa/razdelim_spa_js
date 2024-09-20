@@ -7,15 +7,17 @@
 				{{ person }}
 			</div>
 		</div>
-		<v-btn variant="outlined">+</v-btn>
-		<div class="new__person" v-if="this.dialogVisible === true"></div>
-		<v-form @submit.prevent>
-			<v-text-field v-model="newPerson" label="Введите имя">
+		<v-btn variant="outlined" v-if="this.dialogVisible === false" @click="this.dialogVisible = true">+</v-btn>
+		<div class="new__person" v-if="this.dialogVisible === true">
+            <v-form @submit.prevent>
+			<v-text-field v-model="newPerson" label="Введите имя" v-focus>
 			</v-text-field>
 		</v-form>
 		<v-btn @click="addPersonsAndClearInput(this.newPerson)"
 			>Добавить</v-btn
 		>
+        </div>
+		
 	</div>
 </template>
 
@@ -36,8 +38,9 @@ export default {
 		};
 	},
 	methods: {
-		addPersonsAndClearInput(newPerson) {
+		addPersonsAndClearInput() {
 			this.addPerson(this.newPerson);
+            this.dialogVisible = false;
 			this.newPerson = "";
 		},
 	},
