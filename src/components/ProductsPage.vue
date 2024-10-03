@@ -1,6 +1,16 @@
 <template>
 	<div class="products__page">
 		<div class="products">
+			<div class="payer">
+				<v-select 
+				clearable="true" 
+				density="compact" 
+				label="Кто оплатил счёт?" 
+				variant="outlined" 
+				width="500"
+				:items="['Сергей', 'Петр']"
+				></v-select>
+			</div>
 			<div v-for="product in products">
 				{{ product.name }}
 				{{ product.price }}
