@@ -27,11 +27,6 @@ export default {
 </script>
 
 <style scoped>
-#start {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
 header {
 	text-align: center;
 }

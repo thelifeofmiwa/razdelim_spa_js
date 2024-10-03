@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <start-page></start-page>
+    <persons-page></persons-page>
     <products-page></products-page>
   </div>
 </template>
