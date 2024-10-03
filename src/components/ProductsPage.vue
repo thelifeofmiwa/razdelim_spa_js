@@ -5,16 +5,16 @@
 				{{ product.name }}
 				{{ product.price }}
 				<div v-for="person in persons">
-                    <v-btn>{{ person.name }}</v-btn>
-                </div>
+					<v-btn>{{ person.name }}</v-btn>
+				</div>
 			</div>
 			<v-btn
-				@click="addProduct = true"
-				v-if="addProduct === false"
+				@click="formVisible = true"
+				v-if="formVisible === false"
 				>+</v-btn
 			>
 		</div>
-		<div class="add_product" v-if="addProduct === true">
+		<div class="add_product" v-if="formVisible === true">
 			<v-form>
 				<v-text-field
 					v-model="productName"
@@ -43,6 +43,7 @@
 
 <script>
 import usePersonsStore from "../stores/persons";
+// import useProductsStore from "../stores/products";
 
 export default {
 	name: "products-page",
@@ -54,7 +55,7 @@ export default {
 		return {
 			productName: "",
 			productPrice: "",
-			addProduct: false,
+			formVisible: false,
 			products: [],
 		};
 	},
@@ -66,7 +67,11 @@ export default {
 			});
 			this.productName = "";
 			this.productPrice = "";
-			this.addProduct = false;
+			this.formVisible = false;
+			// this.addProduct(this.productName, Number(this.productPrice));
+			// this.productName = "";
+			// this.productPrice = "";
+			// this.formVisible = false; метод для работы со стором
 		},
 	},
 };
