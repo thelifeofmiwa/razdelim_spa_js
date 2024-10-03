@@ -4,7 +4,7 @@
 			<h1>Персоны</h1>
 			<!-- Динамически генерируем список персон из массива persons -->
 			<div v-for="person in persons" :key="person">
-				{{ person }}
+				{{ person.name }}
 			</div>
 		</div>
 		<v-btn
@@ -22,6 +22,7 @@
 				>
 				</v-text-field>
 			</v-form>
+			<!-- Используем модифицированный метод хранилища при добавлении новых персон -->
 			<v-btn @click="addPersonsAndClearInput(this.newPerson)"
 				>Добавить</v-btn
 			>
@@ -37,13 +38,12 @@ export default {
 	name: "persons-page",
 	setup() {
 		const persons = usePersonsStore();
-		persons.addPerson();
 		return persons;
 	}, // инициализация массива persons из хранилища
 	data() {
 		return {
-			dialogVisible: false,
-			newPerson: "",
+			dialogVisible: false, // переменная с булевым значением для контроля видимости формы добавления новых имён
+			newPerson: "", // реактивная переменная, к которой привязана модель имени нового человека; динамически изменяется и очищается при добавлении нового человека
 		};
 	},
 	methods: {
@@ -51,7 +51,7 @@ export default {
 			this.addPerson(this.newPerson);
 			this.dialogVisible = false;
 			this.newPerson = "";
-		}, // Используем метод хранилища для добавления нового человека в массив имён, после скрываем диалоговое окно и очищаем переменную newPerson
+		}, // Модифицируем метод хранилища для добавления нового человека: добавляем к нему скрытие формы и очищение реактивной переменной newPerson
 	},
 };
 </script>
@@ -60,7 +60,7 @@ export default {
 .new__person {
 	margin-top: 30px;
 }
-.next__page{
-	margin-bottom: auto;	
+.next__page {
+	margin-bottom: auto;
 }
 </style>
