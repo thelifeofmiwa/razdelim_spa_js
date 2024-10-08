@@ -7,13 +7,14 @@
 				{{ person.name }}
 			</div>
 		</div>
+		<!-- Здесь и далее искользуем компонент "v-btn" из UI-библиотеки Vuetify  -->
 		<v-btn
 			variant="outlined"
 			v-if="this.dialogVisible === false"
 			@click="this.dialogVisible = true"
 			>+</v-btn
 		>
-		<!-- При клике на кнопку '+' генерируем форму для добавления новых людей  -->
+		<!-- При клике на кнопку '+' генерируем форму для добавления новых людей, она так же из Vuetify  -->
 		<div class="new__person" v-if="this.dialogVisible === true">
 			<v-form @submit.prevent>
 				<v-text-field
@@ -48,7 +49,12 @@ export default {
 	},
 	methods: {
 		addPersonsAndClearInput() {
-			this.addPerson(this.newPerson);
+			const person = {
+				name: this.newPerson,
+				count: 0,
+				selectedProducts: []
+			}
+			this.addPerson(person);
 			this.dialogVisible = false;
 			this.newPerson = "";
 		}, // Модифицируем метод хранилища для добавления нового человека: добавляем к нему скрытие формы и очищение реактивной переменной newPerson
