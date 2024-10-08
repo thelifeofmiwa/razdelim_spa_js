@@ -17,7 +17,8 @@
 				<b>цену</b> позиции, а мы посчитаем всё за вас!
 			</p>
 		</div>
-		<v-btn variant="outlined">Начать</v-btn>
+		<v-btn variant="outlined" @click="$router.push('/persons')">
+			Начать</v-btn>
 	</div>
 </template>
 
