@@ -2,20 +2,46 @@
 	<div class="products__page">
 		<div class="products">
 			<div class="payer">
-				<v-select 
-				clearable="true" 
-				density="compact" 
-				label="Кто оплатил счёт?" 
-				variant="outlined" 
-				width="500"
-				:items="['Сергей', 'Петр']"
+				<v-select
+					clearable="true"
+					density="compact"
+					label="Кто оплатил счёт?"
+					variant="outlined"
+					width="500"
+					:items="personsToStringArray(persons)"
 				></v-select>
 			</div>
-			<div v-for="product in products">
-				{{ product.name }}
-				{{ product.price }}
-				<div v-for="person in persons">
-					<v-btn>{{ person.name }}</v-btn>
+			<div
+				v-for="person in persons"
+				:key="person.count"
+				style="margin-bottom: 20px"
+			>
+				{{ person.name }} -
+				{{ calculatePersonShare(person) }}р
+			</div>
+			<div v-for="product in products" :key="product.name">
+				{{ product.name }} -
+				{{ product.price }}р
+				<div
+					v-for="person in persons"
+					:key="person.name"
+				>
+					<v-btn
+						@click="
+							toggleProductAssignment(
+								person,
+								product
+							)
+						"
+						>{{ person.name }}
+						{{
+							person.selectedProducts.includes(
+								product
+							)
+								? "(выбран)"
+								: ""
+						}}</v-btn
+					>
 				</div>
 			</div>
 			<v-btn
@@ -52,36 +78,69 @@
 </template>
 
 <script>
-import usePersonsStore from "../stores/persons";
-// import useProductsStore from "../stores/products";
+import usePersonsAndProductsStore from "../stores/persons";
 
 export default {
 	name: "products-page",
 	setup() {
-		const persons = usePersonsStore();
-		return persons;
+		const personsAndProducts = usePersonsAndProductsStore();
+		return personsAndProducts;
 	},
 	data() {
 		return {
 			productName: "",
 			productPrice: "",
 			formVisible: false,
-			products: [],
 		};
 	},
 	methods: {
+		personsToStringArray(objArray) {
+			return objArray.map((obj) => obj.name);
+		},
 		addProductToArray() {
-			this.products.push({
+			const newProduct = {
 				name: this.productName,
-				price: this.productPrice,
-			});
+				price: parseFloat(this.productPrice),
+				selectedBy: [],
+			};
+			this.addProduct(newProduct);
 			this.productName = "";
 			this.productPrice = "";
 			this.formVisible = false;
-			// this.addProduct(this.productName, Number(this.productPrice));
-			// this.productName = "";
-			// this.productPrice = "";
-			// this.formVisible = false; метод для работы со стором
+		},
+		toggleProductAssignment(person, product) {
+			const isSelected = product.selectedBy.includes(person);
+			if (isSelected) {
+				// Удаляем человека из списка
+				product.selectedBy = product.selectedBy.filter(
+					(p) => p !== person
+				);
+			} else {
+				// Добавляем человека в список
+				product.selectedBy.push(person);
+			}
+		},
+		calculatePersonShare(person) {
+			let total = 0;
+			this.products.forEach((product) => {
+				if (product.selectedBy.includes(person)) {
+					total +=
+						product.price /
+						product.selectedBy.length;
+				}
+			});
+			return total.toFixed(2);
+		},
+		calculatePersonShare(person) {
+			let total = 0;
+			this.products.forEach((product) => {
+				if (product.selectedBy.includes(person)) {
+					total +=
+						product.price /
+						product.selectedBy.length;
+				}
+			});
+			return total.toFixed(2);
 		},
 	},
 };
