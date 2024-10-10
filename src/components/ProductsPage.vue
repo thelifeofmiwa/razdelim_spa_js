@@ -1,49 +1,54 @@
 <template>
 	<div class="products__page">
+		<h1>Продукты</h1>
 		<div class="products">
-			<div class="payer">
-				<v-select
-					clearable="true"
-					density="compact"
-					label="Кто оплатил счёт?"
-					variant="outlined"
-					width="500"
-					:items="personsToStringArray(persons)"
-				></v-select>
-			</div>
-			<div
-				v-for="person in persons"
-				:key="person.count"
-				style="margin-bottom: 20px"
-			>
-				{{ person.name }} -
-				{{ calculatePersonShare(person) }}р
-			</div>
-			<div v-for="product in products" :key="product.name">
-				{{ product.name }} -
-				{{ product.price }}р
+			<div>
 				<div
-					v-for="person in persons"
-					:key="person.name"
+					v-for="product in products"
+					:key="product.name"
+					style="margin-bottom: 10px"
 				>
-					<v-btn
-						@click="
-							toggleProductAssignment(
-								person,
-								product
-							)
-						"
-						>{{ person.name }}
-						{{
-							person.selectedProducts.includes(
-								product
-							)
-								? "(выбран)"
-								: ""
-						}}</v-btn
+					<div class="payer">
+						<v-select
+							clearable="true"
+							density="compact"
+							label="Кто оплатил продукт?"
+							variant="outlined"
+							width="500"
+							:items="
+								personsToStringArray(
+									persons
+								)
+							"
+						></v-select>
+					</div>
+
+					{{ product.name }} -
+					{{ product.price }}р
+					<div
+						v-for="person in persons"
+						:key="person.name"
 					>
+						<v-btn
+							@click="
+								toggleProductAssignment(
+									person,
+									product
+								)
+							"
+							>{{ person.name }}
+							{{
+								person.selectedProducts.includes(
+									product
+								)
+									? "(выбран)"
+									: ""
+							}}</v-btn
+						>
+					</div>
 				</div>
 			</div>
+
 			<v-btn
 				@click="formVisible = true"
 				v-if="formVisible === false"
@@ -111,14 +116,15 @@ export default {
 		toggleProductAssignment(person, product) {
 			const isSelected = product.selectedBy.includes(person);
 			if (isSelected) {
-				// Удаляем человека из списка
 				product.selectedBy = product.selectedBy.filter(
 					(p) => p !== person
 				);
 			} else {
-				// Добавляем человека в список
 				product.selectedBy.push(person);
 			}
+
+			// Пересчитываем долю для каждого человека после изменения
+			this.persons.forEach(this.calculatePersonShare);
 		},
 		calculatePersonShare(person) {
 			let total = 0;
@@ -129,18 +135,8 @@ export default {
 						product.selectedBy.length;
 				}
 			});
-			return total.toFixed(2);
-		},
-		calculatePersonShare(person) {
-			let total = 0;
-			this.products.forEach((product) => {
-				if (product.selectedBy.includes(person)) {
-					total +=
-						product.price /
-						product.selectedBy.length;
-				}
-			});
-			return total.toFixed(2);
+			// Перезаписываем значение count в объекте person
+			person.count = total.toFixed(2); // округляем до 2 знаков после запятой
 		},
 	},
 };
