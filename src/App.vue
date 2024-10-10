@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <start-page></start-page>
-    <persons-page></persons-page>
-    <products-page></products-page>
-    <result-page></result-page>
+    <persons-page style="margin-top: 15px;"></persons-page>
+    <products-page style="margin-top: 15px;"></products-page>
+    <result-page style="margin-top: 15px;"></result-page>
   </div>
 </template>
 
