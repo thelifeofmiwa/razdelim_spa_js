@@ -3,17 +3,19 @@
     <start-page></start-page>
     <persons-page></persons-page>
     <products-page></products-page>
+    <result-page></result-page>
   </div>
 </template>
 
 <script>
 import PersonsPage from './components/PersonsPage.vue';
 import ProductsPage from './components/ProductsPage.vue';
+import ResultPage from './components/ResultPage.vue';
 import StartPage from './components/StartPage.vue';
 
 
   export default {
-      components: {StartPage, PersonsPage, ProductsPage}
+      components: {StartPage, PersonsPage, ProductsPage, ResultPage}
   }
 </script>
 
