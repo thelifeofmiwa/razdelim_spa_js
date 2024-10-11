@@ -123,7 +123,6 @@ export default {
 				product.selectedBy.push(person);
 			}
 
-			// Пересчитываем долю для каждого человека после изменения
 			this.persons.forEach(this.calculatePersonShare);
 		},
 		calculatePersonShare(person) {
@@ -135,8 +134,7 @@ export default {
 						product.selectedBy.length;
 				}
 			});
-			// Перезаписываем значение count в объекте person
-			person.count = total.toFixed(2); // округляем до 2 знаков после запятой
+			person.count = total.toFixed(2); 
 		},
 	},
 };
