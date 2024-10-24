@@ -19,15 +19,10 @@ import StartPage from './components/StartPage.vue';
   }
 </script>
 
-<style>
+<style lang="scss">
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-#app{
-  display: flex;
-	flex-direction: column;
-	align-items: center;
 }
 </style>
