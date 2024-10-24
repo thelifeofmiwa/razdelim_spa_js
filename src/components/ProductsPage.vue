@@ -2,60 +2,58 @@
 	<div class="products__page">
 		<h1>Продукты</h1>
 		<div class="products">
-			<div>
-				<div
-					v-for="product in products"
-					:key="product.name"
-					style="margin-bottom: 10px"
-				>
-					<div class="payer">
-						<v-select
-							clearable="true"
-							density="compact"
-							label="Кто оплатил продукт?"
-							variant="outlined"
-							width="500"
-							:items="
-								personsToStringArray(
-									persons
-								)
-							"
-						></v-select>
-					</div>
+			<div
+				v-for="product in products"
+				:key="product.name"
+				style="margin-bottom: 10px"
+			>
+				<div class="payer">
+					<v-select
+						clearable="true"
+						density="compact"
+						label="Кто оплатил продукт?"
+						variant="outlined"
+						width="500"
+						v-model="product.paidBy"
+						:items="
+							personsToStringArray(
+								persons
+							)
+						"
+					></v-select>
+				</div>
 
-					{{ product.name }} -
-					{{ product.price }}р
-					<div
-						v-for="person in persons"
-						:key="person.name"
+				{{ product.name }} -
+				{{ product.price.toFixed(2) }}р
+				<div
+					v-for="person in persons"
+					:key="person.name"
+				>
+					<v-btn
+						@click="
+							toggleProductAssignment(
+								person,
+								product
+							)
+						"
 					>
-						<v-btn
-							@click="
-								toggleProductAssignment(
-									person,
-									product
-								)
-							"
-							>{{ person.name }}
-							{{
-								person.selectedProducts.includes(
-									product
-								)
-									? "(выбран)"
-									: ""
-							}}</v-btn
-						>
-					</div>
+						{{ person.name }}
+						{{
+							product.selectedBy.includes(
+								person
+							)
+								? "(выбран)"
+								: ""
+						}}
+					</v-btn>
 				</div>
 			</div>
-
-			<v-btn
-				@click="formVisible = true"
-				v-if="formVisible === false"
+			<v-btn @click="formVisible = true" v-if="!formVisible"
 				>+</v-btn
 			>
 		</div>
-		<div class="add_product" v-if="formVisible === true">
+
+		<div class="add_product" v-if="formVisible">
 			<v-form>
 				<v-text-field
 					v-model="productName"
@@ -63,15 +61,13 @@
 					variant="outlined"
 					placeholder="Пицца 4 сыра"
 					width="500"
-				>
-				</v-text-field>
+				/>
 				<v-text-field
 					v-model="productPrice"
 					label="Введите цену"
 					variant="outlined"
 					placeholder="300"
-				>
-				</v-text-field>
+				/>
 				<v-btn
 					variant="outlined"
 					@click="addProductToArray"
@@ -79,17 +75,42 @@
 				>
 			</v-form>
 		</div>
+
+		<div class="debts">
+			<h2>Долги</h2>
+			<div v-for="person in persons" :key="person.name">
+				<div>{{ person.name }}:</div>
+				<div
+					v-for="(
+						debt, creditor
+					) in calculateDebts(person)"
+					:key="creditor.name"
+				>
+					{{ creditor.name }}:
+					{{ debt.toFixed(2) }}р
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
+import { computed } from "vue";
 import usePersonsAndProductsStore from "../stores/persons";
 
 export default {
 	name: "products-page",
 	setup() {
-		const personsAndProducts = usePersonsAndProductsStore();
-		return personsAndProducts;
+		const store = usePersonsAndProductsStore();
+
+		const persons = computed(() => store.persons);
+		const products = computed(() => store.products);
+
+		return {
+			store,
+			persons,
+			products,
+		};
 	},
 	data() {
 		return {
@@ -107,8 +128,9 @@ export default {
 				name: this.productName,
 				price: parseFloat(this.productPrice),
 				selectedBy: [],
+				paidBy: null,
 			};
-			this.addProduct(newProduct);
+			this.store.addProduct(newProduct);
 			this.productName = "";
 			this.productPrice = "";
 			this.formVisible = false;
@@ -122,22 +144,29 @@ export default {
 			} else {
 				product.selectedBy.push(person);
 			}
-
-			this.persons.forEach(this.calculatePersonShare);
 		},
-		calculatePersonShare(person) {
-			let total = 0;
+		calculateDebts(person) {
+			const debts = {};
 			this.products.forEach((product) => {
-				if (product.selectedBy.includes(person)) {
-					total +=
+				if (
+					product.paidBy &&
+					product.selectedBy.includes(person)
+				) {
+					const share =
 						product.price /
 						product.selectedBy.length;
+					if (!debts[product.paidBy]) {
+						debts[product.paidBy] = 0;
+					}
+					debts[product.paidBy] += share;
 				}
 			});
-			person.count = total.toFixed(2); 
+			return debts;
 		},
 	},
 };
 </script>
 
-<style scoped></style>
+<style>
+
+</style>
