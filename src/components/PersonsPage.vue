@@ -1,9 +1,13 @@
 <template>
-	<div class="persons__page">
+	<div id="persons__page">
 		<div class="persons">
 			<h1>Персоны</h1>
 			<!-- Динамически генерируем список персон из массива persons -->
-			<div v-for="person in persons" :key="person">
+			<div
+				class="person__list"
+				v-for="person in persons"
+				:key="person"
+			>
 				{{ person.name }}
 			</div>
 		</div>
@@ -24,11 +28,19 @@
 				</v-text-field>
 			</v-form>
 			<!-- Используем модифицированный метод хранилища при добавлении новых персон -->
-			<v-btn @click="addPersonsAndClearInput(this.newPerson)"
+			<v-btn
+			variant="outlined" 
+			@click="addPersonsAndClearInput(this.newPerson)"
 				>Добавить</v-btn
 			>
 		</div>
-		<v-btn class="next__page">На следующий этап</v-btn>
+		<v-btn
+			class="button"
+			variant="outlined"
+			rounded="xl"
+			elevation="6"
+			>На следующий этап</v-btn
+		>
 	</div>
 </template>
 
@@ -52,8 +64,8 @@ export default {
 			const person = {
 				name: this.newPerson,
 				count: 0,
-				selectedProducts: []
-			}
+				selectedProducts: [],
+			};
 			this.addPerson(person);
 			this.dialogVisible = false;
 			this.newPerson = "";
@@ -62,11 +74,24 @@ export default {
 };
 </script>
 
-<style scoped>
-.new__person {
-	margin-top: 30px;
-}
-.next__page {
-	margin-bottom: auto;
+<style scoped lang="scss">
+#persons__page {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background-color: rgb(201, 223, 223);
+
+	.persons {
+		padding: auto;
+
+		.person__list {
+			margin: 10px 10px;
+		}
+		.new__person{
+			margin-bottom: 10px;
+		}
+	}
 }
 </style>
