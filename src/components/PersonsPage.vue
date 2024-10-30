@@ -1,8 +1,7 @@
 <template>
 	<div id="persons__page">
 		<h1>Персоны</h1>
-		<div :class="{persons: persons.length > 0}">
-			
+		<div :class="{ persons: persons.length > 0 }">
 			<!-- Динамически генерируем список персон из массива persons -->
 			<div
 				class="person__list"
@@ -22,8 +21,9 @@
 		>
 		<!-- При клике на кнопку '+' генерируем форму для добавления новых людей, она так же из Vuetify  -->
 		<div class="new__person" v-if="this.dialogVisible === true">
-			<v-form @submit.prevent>
+			<v-form @submit.prevent >
 				<v-text-field
+					min-width="400"
 					v-model="newPerson"
 					label="Введите имя"
 				>
@@ -31,12 +31,13 @@
 			</v-form>
 			<!-- Используем модифицированный метод хранилища при добавлении новых персон -->
 			<v-btn
-			variant="outlined" 
-			@click="addPersonsAndClearInput(this.newPerson)"
+				variant="outlined"
+				@click="addPersonsAndClearInput(this.newPerson)"
 				>Добавить</v-btn
 			>
 		</div>
 		<v-btn
+		v-if="persons.length > 0"
 			class="button"
 			variant="outlined"
 			rounded="xl"
@@ -87,15 +88,18 @@ export default {
 
 	.persons {
 		padding: auto;
-		border: 1px solid teal;
+		border-radius: 3px;
+
 		.person__list {
 			margin: 10px 10px;
+			padding: 5px;
 		}
-		.new__person{
-			margin-bottom: 10px;
-		}
+		
 	}
-	.button{
+	.new__person{
+		margin: 10px;
+	}
+	.button {
 		margin-top: 10px;
 	}
 }
