@@ -30,6 +30,8 @@
 					:key="person.name"
 				>
 					<v-btn
+						class="payers"
+						variant="outlined"
 						@click="
 							toggleProductAssignment(
 								person,
@@ -50,14 +52,20 @@
 			</div>
 			
 		</div>
-		<div class="add">
-			<v-btn @click="formVisible = true" v-if="!formVisible"
+		
+			<v-btn
+			variant="outlined"
+			rounded="xl"
+			elevation="6"
+			class="add" 
+			@click="formVisible = true" 
+			v-if="!formVisible"
 				>+</v-btn
 			>
-		</div>
+		
 		
 
-		<div class="add_product" v-if="formVisible">
+		<div class="add_product" @click.stop v-if="formVisible">
 			<v-form>
 				<v-text-field
 					v-model="productName"
@@ -191,6 +199,8 @@ export default {
 		.add_product{
 			margin-top: 20px;
 		}
-
+		.payers{
+			margin-top: 10px
+		}	
 }
 </style>
