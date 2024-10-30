@@ -1,7 +1,7 @@
 <template>
 	<div class="products__page">
 		<h1>Продукты</h1>
-		<div class="products">
+		<div :class="{products: products.length > 0}">
 			<div
 				v-for="product in products"
 				:key="product.name"
@@ -48,10 +48,11 @@
 					</v-btn>
 				</div>
 			</div>
-			<v-btn @click="formVisible = true" v-if="!formVisible"
+			
+		</div>
+		<v-btn @click="formVisible = true" v-if="!formVisible"
 				>+</v-btn
 			>
-		</div>
 
 		<div class="add_product" v-if="formVisible">
 			<v-form>
@@ -76,7 +77,7 @@
 			</v-form>
 		</div>
 
-		<div class="debts">
+		<!-- <div class="debts">
 			<h2>Долги</h2>
 			<div v-for="person in persons" :key="person.name">
 				<div>{{ person.name }}:</div>
@@ -90,7 +91,7 @@
 					{{ debt.toFixed(2) }}р
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -167,6 +168,23 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.products__page{
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background-color: rgb(201, 223, 223);
 
+		.products{
+			margin-top: 10px;
+			padding: 10px;
+			border: 1px solid black;
+		}
+		.add_product{
+			margin-top: 20px;
+		}
+
+}
 </style>
