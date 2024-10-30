@@ -50,9 +50,12 @@
 			</div>
 			
 		</div>
-		<v-btn @click="formVisible = true" v-if="!formVisible"
+		<div class="add">
+			<v-btn @click="formVisible = true" v-if="!formVisible"
 				>+</v-btn
 			>
+		</div>
+		
 
 		<div class="add_product" v-if="formVisible">
 			<v-form>
@@ -181,6 +184,9 @@ export default {
 			margin-top: 10px;
 			padding: 10px;
 			border: 1px solid black;
+		}
+		.add{
+			margin-top: 15px;
 		}
 		.add_product{
 			margin-top: 20px;

@@ -85,7 +85,7 @@ export default {
 
 	.persons {
 		padding: auto;
-
+		border: 1px solid teal;
 		.person__list {
 			margin: 10px 10px;
 		}
