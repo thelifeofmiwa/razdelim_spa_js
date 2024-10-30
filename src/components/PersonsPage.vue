@@ -1,7 +1,8 @@
 <template>
 	<div id="persons__page">
-		<div class="persons">
-			<h1>Персоны</h1>
+		<h1>Персоны</h1>
+		<div :class="{persons: persons.length > 0}">
+			
 			<!-- Динамически генерируем список персон из массива persons -->
 			<div
 				class="person__list"
@@ -13,6 +14,7 @@
 		</div>
 		<!-- Здесь и далее искользуем компонент "v-btn" из UI-библиотеки Vuetify  -->
 		<v-btn
+			class="button"
 			variant="outlined"
 			v-if="this.dialogVisible === false"
 			@click="this.dialogVisible = true"
@@ -92,6 +94,9 @@ export default {
 		.new__person{
 			margin-bottom: 10px;
 		}
+	}
+	.button{
+		margin-top: 10px;
 	}
 }
 </style>
