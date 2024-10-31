@@ -87,7 +87,14 @@
 				>
 			</v-form>
 		</div>
-
+		<v-btn
+		variant="outlined"
+		rounded="xl"
+		elevation="6"
+		class="finals"
+		>
+		Перейти к результатам
+		</v-btn>
 		<!-- <div class="debts">
 			<h2>Долги</h2>
 			<div v-for="person in persons" :key="person.name">
@@ -103,6 +110,7 @@
 				</div>
 			</div>
 		</div> -->
+
 	</div>
 </template>
 
@@ -179,7 +187,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .products__page{
 	height: 100vh;
 	display: flex;
