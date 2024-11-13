@@ -1,18 +1,18 @@
 import { defineStore } from "pinia";
 
-const usePersonsAndProductsStore = defineStore("persons", {
-	state: () => ({
-		persons: [],
-		products: [],
-	}),
-	actions: {
-		addPerson(newPerson) {
-			this.persons.push(newPerson);
-		}, // добавляем в массив persons новое имя
-		addProduct(product) {
-			this.products.push(product);
-		}, // добавляем в массив Products новый продукт
-	},
+const usePersonsAndProductsStore = defineStore('persons', {
+    state: () => ({
+            persons: [], //массив персон
+            products: [], //массив продуктов
+    }),
+    actions: {
+        addNewPerson(newPerson) { //метод для добавления новой персоны
+            this.persons.push(newPerson);
+        },
+        addNewProduct(newProduct){ //метод для добавления нового продукта
+            this.products.push(newProduct);
+        }
+    }
 });
 
 export default usePersonsAndProductsStore;
