@@ -1,28 +1,17 @@
 <template>
-  <div id="app">
-    <start-page></start-page>
-    <persons-page style="margin-top: 15px;"></persons-page>
-    <products-page style="margin-top: 15px;"></products-page>
-    <result-page style="margin-top: 15px;"></result-page>
+  <div>
+      <router-view></router-view> <!-- Отображение страницы в соответствиие с данными роутера(переданным маршрутом)-->
   </div>
 </template>
 
-<script>
-import PersonsPage from './components/PersonsPage.vue';
-import ProductsPage from './components/ProductsPage.vue';
-import ResultPage from './components/ResultPage.vue';
-import StartPage from './components/StartPage.vue';
+<script setup lang="ts">
 
-
-  export default {
-      components: {StartPage, PersonsPage, ProductsPage, ResultPage}
-  }
 </script>
 
 <style lang="scss">
 *{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
 }
 </style>

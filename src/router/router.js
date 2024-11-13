@@ -1,26 +1,33 @@
+import PersonsPage from "../pages/PersonsPage.vue";
+import ProductsPage from "../pages/ProductsPage.vue";
+import ResultPage from "../pages/ResultPage.vue";
+import StartPage from "../pages/StartPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import StartPage from "../components/StartPage.vue";
-import PersonsPage from "../components/PersonsPage.vue";
-import ProductsPage from "../components/ProductsPage.vue";
-
-const routes = [
-    {
-        path: '/',
-        component: StartPage
-    },
-    {
-        path: '/persons',
-        component: PersonsPage
-    },
-    {
-        path: '/products',
-        component: ProductsPage
-    }
-]
 
 const router = createRouter({
-    routes,
-    history: createWebHistory(import.meta.env.BASE_URL  )
-})
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [ //описание маршрутов роутера
+        {
+            path: "/",
+            name: "startPage",
+            component: StartPage,
+        },
+        {
+            path: '/persons',
+            name: 'personsPage',
+            component: PersonsPage
+        },
+        {
+            path: "/products",
+            name: "productsPage",
+            component: ProductsPage,
+        },
+        {
+            path: "/result",
+            name: "resultPage",
+            component: ResultPage,
+        },
+    ],
+});
 
 export default router;
