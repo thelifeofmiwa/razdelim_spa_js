@@ -43,7 +43,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import ProjectButton from "../components/UI/ProjectButton.vue";
 import { useResult } from "../composables/useResult";
 
