@@ -1,214 +1,80 @@
 <template>
-	<div class="products__page">
-		<h1>Продукты</h1>
-		<div :class="{products: products.length > 0}">
-			<div
-				v-for="product in products"
-				:key="product.name"
-				style="margin-bottom: 10px"
-			>
-				<div class="payer">
-					<v-select
-						clearable="true"
-						density="compact"
-						label="Кто оплатил продукт?"
-						variant="outlined"
-						width="500"
-						v-model="product.paidBy"
-						:items="
-							personsToStringArray(
-								persons
-							)
-						"
-					></v-select>
-				</div>
+    <div id="products__page">
+        <h1>Продукты</h1>
+        <h2>Добавьте продукты, цену которых нужно разделить</h2>
 
-				{{ product.name }} -
-				{{ product.price.toFixed(2) }}р
-				<div
-					v-for="person in persons"
-					:key="person.name"
-				>
-					<v-btn
-						class="payers"
-						variant="outlined"
-						@click="
-							toggleProductAssignment(
-								person,
-								product
-							)
-						"
-					>
-						{{ person.name }}
-						{{
-							product.selectedBy.includes(
-								person
-							)
-								? "(выбран)"
-								: ""
-						}}
-					</v-btn>
-				</div>
-			</div>
-			
-		</div>
-		
-			<v-btn
-			variant="outlined"
-			rounded="xl"
-			elevation="6"
-			class="add" 
-			@click="formVisible = true" 
-			v-if="!formVisible"
-				>+</v-btn
-			>
-		
-		
+        <ProductList :persons="persons" :products="products" />
+        <!--Импортируем компонент списка персон и пропсом передаём массив persons-->
 
-		<div class="add_product" @click.stop v-if="formVisible">
-			<v-form>
-				<v-text-field
-					v-model="productName"
-					label="Введите название продукта"
-					variant="outlined"
-					placeholder="Пицца 4 сыра"
-					width="500"
-				/>
-				<v-text-field
-					v-model="productPrice"
-					label="Введите цену"
-					variant="outlined"
-					placeholder="300"
-				/>
-				<v-btn
-					variant="outlined"
-					@click="addProductToArray"
-					>Добавить</v-btn
-				>
-			</v-form>
-		</div>
-		<v-btn
-		variant="outlined"
-		rounded="xl"
-		elevation="6"
-		class="finals"
-		>
-		Перейти к результатам
-		</v-btn>
-		<!-- <div class="debts">
-			<h2>Долги</h2>
-			<div v-for="person in persons" :key="person.name">
-				<div>{{ person.name }}:</div>
-				<div
-					v-for="(
-						debt, creditor
-					) in calculateDebts(person)"
-					:key="creditor.name"
-				>
-					{{ creditor.name }}:
-					{{ debt.toFixed(2) }}р
-				</div>
-			</div>
-		</div> -->
+        <ProjectButton
+            class="add"
+            @click="formVisible = true"
+            v-if="formVisible === false"
+            >+</ProjectButton
+        >
+        <!--Кнопка для открытия формы добавления нового продукта-->
 
-	</div>
+        <div class="add_product" v-if="formVisible === true">
+            <!--Форма для добавления нового продукта-->
+            <ProjectInput
+                v-model="productName"
+                label="Введите название продукта"
+                placeholder="Пицца 4 сыра"
+            />
+            <ProjectInput
+                v-model="productPrice"
+                label="Введите цену продукта"
+                placeholder="700"
+            />
+            <ProjectButton class="add" @click="addNewProductAndClearInput"
+                >Добавить</ProjectButton
+            >
+        </div>
+        <ProjectButton class="next" @click="goToNextPage" 
+            >К результатам!</ProjectButton
+        >
+    </div>
 </template>
 
-<script>
-import { computed } from "vue";
-import usePersonsAndProductsStore from "../stores/persons";
+<script setup>
+import ProductList from "../components/ProductList.vue";
+import ProjectButton from "../components/UI/ProjectButton.vue";
+import ProjectInput from "../components/UI/ProjectInput.vue";
+import { useProducts } from "../composables/useProducts"; 
 
-export default {
-	name: "products-page",
-	setup() {
-		const store = usePersonsAndProductsStore();
-
-		const persons = computed(() => store.persons);
-		const products = computed(() => store.products);
-
-		return {
-			store,
-			persons,
-			products,
-		};
-	},
-	data() {
-		return {
-			productName: "",
-			productPrice: "",
-			formVisible: false,
-		};
-	},
-	methods: {
-		personsToStringArray(objArray) {
-			return objArray.map((obj) => obj.name);
-		},
-		addProductToArray() {
-			const newProduct = {
-				name: this.productName,
-				price: parseFloat(this.productPrice),
-				selectedBy: [],
-				paidBy: null,
-			};
-			this.store.addProduct(newProduct);
-			this.productName = "";
-			this.productPrice = "";
-			this.formVisible = false;
-		},
-		toggleProductAssignment(person, product) {
-			const isSelected = product.selectedBy.includes(person);
-			if (isSelected) {
-				product.selectedBy = product.selectedBy.filter(
-					(p) => p !== person
-				);
-			} else {
-				product.selectedBy.push(person);
-			}
-		},
-		calculateDebts(person) {
-			const debts = {};
-			this.products.forEach((product) => {
-				if (
-					product.paidBy &&
-					product.selectedBy.includes(person)
-				) {
-					const share =
-						product.price /
-						product.selectedBy.length;
-					if (!debts[product.paidBy]) {
-						debts[product.paidBy] = 0;
-					}
-					debts[product.paidBy] += share;
-				}
-			});
-			return debts;
-		},
-	},
-};
+const {
+    persons,
+    products,
+    productName,
+    productPrice,
+    formVisible,
+    addNewProductAndClearInput,
+    goToNextPage,
+} = useProducts(); //деструктуризируем данные, возвращаемые композабл-функцией useProducts
 </script>
 
 <style scoped lang="scss">
-.products__page{
-	height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	background-color: rgb(201, 223, 223);
+#products__page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgb(201, 223, 223);
 
-		.products{
-			margin-top: 10px;
-			padding: 10px;
-			border: 1px solid black;
-		}
-		.add{
-			margin-top: 15px;
-		}
-		.add_product{
-			margin-top: 20px;
-		}
-		.payers{
-			margin-top: 10px
-		}	
+    .products {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid black;
+    }
+    .add {
+        margin-top: 15px;
+    }
+    .add_product {
+        margin-top: 20px;
+    }
+    .next {
+        margin-top: 10px;
+    }
 }
 </style>
