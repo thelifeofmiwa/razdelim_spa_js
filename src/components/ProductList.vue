@@ -3,7 +3,7 @@
         <!--С помощью директивы v-for итерируемся по массиву products-->
         <ProjectSelect
             v-model="product.paidBy"
-            :itemsProp="arrayToString(persons)"
+            :itemProps="arrayToString(props.persons)"
         ></ProjectSelect>
         <!--С помощью v-model связываем значение селекта и поля продукта paidBy; так же передаём в селект массив имён из массива products-->
         {{ product.name }} - {{ product.price }}
