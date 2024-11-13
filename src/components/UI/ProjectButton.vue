@@ -4,7 +4,7 @@
     </v-btn>
 </template>
 
-<script setup lang="ts">
+<script setup>
 //компонент представляет собой кнопку из ui-библиотеки Vuetify
 </script>
 
