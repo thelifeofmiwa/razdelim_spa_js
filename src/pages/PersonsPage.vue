@@ -1,106 +1,72 @@
 <template>
-	<div id="persons__page">
-		<h1>Персоны</h1>
-		<div :class="{ persons: persons.length > 0 }">
-			<!-- Динамически генерируем список персон из массива persons -->
-			<div
-				class="person__list"
-				v-for="person in persons"
-				:key="person"
-			>
-				{{ person.name }}
-			</div>
-		</div>
-		<!-- Здесь и далее искользуем компонент "v-btn" из UI-библиотеки Vuetify  -->
-		<v-btn
-			class="button"
-			variant="outlined"
-			v-if="this.dialogVisible === false"
-			@click="this.dialogVisible = true"
-			>+</v-btn
-		>
-		<!-- При клике на кнопку '+' генерируем форму для добавления новых людей, она так же из Vuetify  -->
-		<div class="new__person" v-if="this.dialogVisible === true">
-			<v-form @submit.prevent >
-				<v-text-field
-					min-width="400"
-					v-model="newPerson"
-					label="Введите имя"
-				>
-				</v-text-field>
-			</v-form>
-			<!-- Используем модифицированный метод хранилища при добавлении новых персон -->
-			<v-btn
-				variant="outlined"
-				@click="addPersonsAndClearInput(this.newPerson)"
-				>Добавить</v-btn
-			>
-		</div>
-		<v-btn
-		v-if="persons.length > 0"
-			class="button"
-			variant="outlined"
-			rounded="xl"
-			elevation="6"
-			>На следующий этап</v-btn
-		>
-	</div>
+    <div id="persons__page">
+        <h1>Персоны</h1>
+        <h2>Нажмите на плюсик, чтобы добавить новую персону</h2>
+        <PersonList :personsArray="persons" />
+
+        <!--Импортируем форму для отображения персон из компонента PersonList и передаём через пропс массив persons-->
+        <ProjectButton
+            class="button"
+            @click="formVisible = true"
+            v-if="formVisible === false"
+            >+</ProjectButton
+        >
+        <!--Импортируем кнопку из компонента ProjectButton и с помощью директив v-on и v-if влияем на условия видимости формы и кнопки -->
+        <div class="new__person" v-if="formVisible === true">
+            <!--В контейнер импортируем инпут из компонента ProjectInput и связываем его значение с дерективой newPersonName через директиву v-model -->
+            <ProjectInput
+                v-model="newPersonName"
+                label="Введите имя"
+                placeholder="Иван"
+            ></ProjectInput>
+            <ProjectButton @click="addPersonAndClearInput"
+                >Добавить</ProjectButton
+            ><!--Так же импортируем кнопку и при клике добавляем новую персону в массив persons-->
+        </div>
+        <ProjectButton class="button" @click="goToNextPage"
+            >Продолжить</ProjectButton
+        >
+    </div>
 </template>
 
-<script>
-import usePersonsStore from "../stores/persons";
+<script setup>
+import { usePersons } from "../composables/usePersons";
+import ProjectButton from "../components/UI/ProjectButton.vue";
+import ProjectInput from "../components/UI/ProjectInput.vue";
+import PersonList from "../components/PersonList.vue";
 
-export default {
-	name: "persons-page",
-	setup() {
-		const persons = usePersonsStore();
-		return persons;
-	}, // инициализация массива persons из хранилища
-	data() {
-		return {
-			dialogVisible: false, // переменная с булевым значением для контроля видимости формы добавления новых имён
-			newPerson: "", // реактивная переменная, к которой привязана модель имени нового человека; динамически изменяется и очищается при добавлении нового человека
-		};
-	},
-	methods: {
-		addPersonsAndClearInput() {
-			const person = {
-				name: this.newPerson,
-				count: 0,
-				selectedProducts: [],
-			};
-			this.addPerson(person);
-			this.dialogVisible = false;
-			this.newPerson = "";
-		}, // Модифицируем метод хранилища для добавления нового человека: добавляем к нему скрытие формы и очищение реактивной переменной newPerson
-	},
-};
+const {
+    persons,
+    formVisible,
+    newPersonName,
+    addPersonAndClearInput,
+    goToNextPage,
+} = usePersons(); //деструктуризируем данные, возвращаемые composable-функцией usePersons
 </script>
 
 <style scoped lang="scss">
 #persons__page {
-	height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	background-color: rgb(201, 223, 223);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgb(201, 223, 223);
 
-	.persons {
-		padding: auto;
-		border-radius: 3px;
+    .persons {
+        padding: auto;
+        border-radius: 3px;
 
-		.person__list {
-			margin: 10px 10px;
-			padding: 5px;
-		}
-		
-	}
-	.new__person{
-		margin: 10px;
-	}
-	.button {
-		margin-top: 10px;
-	}
+        .person__list {
+            margin: 10px 10px;
+            padding: 5px;
+        }
+    }
+    .new__person {
+        margin: 10px;
+    }
+    .button {
+        margin-top: 10px;
+    }
 }
 </style>
